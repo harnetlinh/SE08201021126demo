@@ -8,6 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import okio.IOException
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,7 +57,47 @@ class RegistrationFragment : Fragment() {
                 startActivity(intent)
             }
         // đổi fragment
+        view.findViewById<Button>(R.id.btnInfo)
+            .setOnClickListener {
+                val data = Bundle()
+                data.putString("TEXT", "Xin chào " + name.text)
+                val info = InformationFragment()
+                info.arguments = data
+                parentFragmentManager
+                    .beginTransaction()
+                    .setReorderingAllowed(true)
+                    .replace(R.id.informationContainer, info)
+                    .addToBackStack(null)
+                    .commit()
+            }
         // lưu
+
+        save.setOnClickListener {
+            val data = listOf(
+                name.text.toString(),
+                id.text.toString(),
+                major.text.toString()
+            )
+            save.isEnabled = false
+            viewLifecycleOwner.lifecycleScope.launch {
+                try {
+                    ProfileStore.save(app, data)
+                    Toast.makeText(
+                        app,
+                        "Đã lưu",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }catch (e: IOException){
+                    Toast.makeText(
+                        app,
+                        "Lưu thất bại",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }finally {
+                    save.isEnabled = true
+                }
+            }
+        }
         // đọc lại
     }
 

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.first
 
 private val Context.studentData by preferencesDataStore(name = "student")
 
-class ProfileStore {
+object ProfileStore {
     private val NAME = stringPreferencesKey("name")
     private val ID = stringPreferencesKey("student_id")
     private val MAJOR = stringPreferencesKey("major")
@@ -34,4 +34,6 @@ class ProfileStore {
             p[MAJOR] ?:""
         )
     }
+
+
 }

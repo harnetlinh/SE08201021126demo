@@ -99,6 +99,29 @@ class RegistrationFragment : Fragment() {
             }
         }
         // đọc lại
+        if(savedInstanceState == null){
+            viewLifecycleOwner.lifecycleScope.launch {
+                try {
+                    val data = ProfileStore.read(app)
+                    if (name.text.isEmpty()){
+                        name.setText(data[0])
+                    }
+                    if (id.text.isEmpty()){
+                        id.setText(data[1])
+                    }
+                    if (major.text.isEmpty()){
+                        major.setText(data[2])
+                    }
+                }catch (e: IOException){
+                    Toast.makeText(
+                        app,
+                        "Không thể đọc dữ liệu",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+
     }
 
 
